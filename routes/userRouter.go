@@ -6,9 +6,9 @@ import (
 	"github.com/yaikob/goland-jwt/middleware"
 )
 
-func UserRoutes(incomingRoutes gin.Engine){
-	incomingRoutes.Use(middleware.Authenticate())
-	incomingRoutes.GET("/users",controller.GetUsers())
-	incomingRoutes.GET("/users/:user_id",controller.GetUser())
-	
+func UserRoutes(incomingRoutes gin.Engine) {
+	incomingRoutes.Use(middleware.Authenticate()) // protected route
+	incomingRoutes.GET("/users", controller.GetUsers())
+	incomingRoutes.GET("/users/:user_id", controller.GetUser())
+
 }

@@ -5,7 +5,7 @@ import (
 	controller "github.com/yaikob/goland-jwt/controllers"
 )
 
-func AuthRoutes(incomingRoutes *gin.Engine){
-	incomingRoutes.POST("user/singup",controller.Singup())
-	incomingRoutes.POST("user/login",controller.Login())
+func AuthRoutes(incomingRoutes *gin.Engine) {
+	incomingRoutes.POST("user/singup", controller.Signup())
+	incomingRoutes.POST("user/login", controller.Login())
 }
