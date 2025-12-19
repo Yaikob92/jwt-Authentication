@@ -18,20 +18,19 @@ func DBinstance() *mongo.Client {
 		log.Fatal("Error loading .env file")
 	}
 
-	MongoDb := os.Getenv("MONGODB_URL")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel() 
 
-	client, err := mongo.NewClient(options.Client().ApplyURI(MongoDb))
+	MongoUrl := os.Getenv("MONGO_URL")
+
+	client, err := mongo.Connect(ctx,options.Client().ApplyURI(MongoUrl))
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	err = client.Connect(ctx)
-	if err != nil {
-		log.Fatal(err)
+	if err := client.Ping(ctx, nil); err != nil {
+		log.Fatal("MongoDB ping failed:", err)
 	}
 	fmt.Println("Connected to MongoDB!")
 
@@ -41,6 +40,9 @@ func DBinstance() *mongo.Client {
 var Client *mongo.Client = DBinstance()
 
 func OpenCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-	var collection *mongo.Collection = client.Database("cluster0").Collection(collectionName)
+	var collection *mongo.Collection = client.Database("cluster1").Collection(collectionName)
 	return collection
 }
+
+
+
