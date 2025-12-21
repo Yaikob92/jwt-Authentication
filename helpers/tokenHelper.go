@@ -61,7 +61,7 @@ func ValidateToken(signedToken string) (claims *SignedDetails, msg string) {
 	token, err := jwt.ParseWithClaims(
 		signedToken,
 		&SignedDetails{},
-		func(token *jwt.Token) (interface{}, error) {
+		func(token *jwt.Token) (interface{}, error){
 			return []byte(SECRET_KEY), nil
 		},
 	)

@@ -70,13 +70,14 @@ func Signup() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error accored while checking for the phone number"})
 			return
 		}
-
+		password := HashPassword(*user.Password)
+		user.Password = &password
+		
 		if emailCount > 0 || phoneCount > 0 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "this email or phone number already exists"})
 			return
 		}
-		password := HashPassword(*user.Password)
-		user.Password = &password
+	
 
 		user.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		user.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
@@ -128,7 +129,7 @@ func Login() gin.HandlerFunc {
 			return
 
 		}
-		passwordValid, msg := VerifyPassword(*user.Password, *foundUser.Password)
+		passwordValid, msg := VerifyPassword(*foundUser.Password, *user.Password)
 		if !passwordValid {
 			c.JSON(http.StatusUnauthorized, gin.H{"Error": msg})
 			return
